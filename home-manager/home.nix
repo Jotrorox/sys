@@ -21,28 +21,39 @@
   home = {
     username = "johannes";
     homeDirectory = "/home/johannes";
+    sessionVariables = {
+      EDITOR = "nvim";
+      SHELL = "zsh";
+    }; 
   };
 
   home.packages = with pkgs; [
+    # Internet
     firefox
-    kate
-    vscode
-    vlc
     vesktop
+
+    # Development
+    vscode-fhs
+    jetbrains.idea-community
+
+    # Media
+    vlc
+    spotify
+    
+    # Games
     steam
+    prismlauncher
+    
+    # TUI tools
     pfetch
     btop
-    thefuck
-    gh
-    spotify
-    prismlauncher
-    ripgrep
     lazygit
+    
+    # Cli tools
+    thefuck
+    gh 
+    ripgrep
   ];
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-  }; 
 
   # Enable home-manager
   programs.home-manager.enable = true;
@@ -92,24 +103,6 @@
         dictionary-german
       ];
 
-    };
-  };
-
-  # Configure git
-  programs.git = {
-    enable = true;
-    package = pkgs.gitFull;
-    userName = "Jotrorox";
-    userEmail = "jotrorox@gmail.com";
-    aliases = {
-      pu = "push";
-      co = "checkout";
-      cm = "commit";
-    };
-    extraConfig = {
-      credential.helper = "${
-          pkgs.git.override { withLibsecret = true; }
-        }/bin/git-credential-libsecret";
     };
   };
 
@@ -190,6 +183,24 @@
         "inherits" = "gruvbox";
         "ui.background" = { };
       };
+    };
+  };
+
+  # Configure git
+  programs.git = {
+    enable = true;
+    package = pkgs.gitFull;
+    userName = "Jotrorox";
+    userEmail = "jotrorox@gmail.com";
+    aliases = {
+      pu = "push";
+      co = "checkout";
+      cm = "commit";
+    };
+    extraConfig = {
+      credential.helper = "${
+	      pkgs.git.override { withLibsecret = true; }
+      }/bin/git-credential-libsecret";
     };
   };
 
