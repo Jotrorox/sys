@@ -33,6 +33,8 @@
     pfetch
     btop
     thefuck
+    gh
+    spotify
   ];
 
   home.sessionVariables = {
