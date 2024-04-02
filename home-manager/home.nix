@@ -35,6 +35,9 @@
     thefuck
     gh
     spotify
+    prismlauncher
+    ripgrep
+    lazygit
   ];
 
   home.sessionVariables = {
@@ -95,12 +98,18 @@
   # Configure git
   programs.git = {
     enable = true;
+    package = pkgs.gitFull;
     userName = "Jotrorox";
     userEmail = "jotrorox@gmail.com";
     aliases = {
       pu = "push";
       co = "checkout";
       cm = "commit";
+    };
+    extraConfig = {
+      credential.helper = "${
+          pkgs.git.override { withLibsecret = true; }
+        }/bin/git-credential-libsecret";
     };
   };
 
@@ -112,8 +121,6 @@
     colorschemes.gruvbox.enable = true;
     plugins = {
       lualine.enable = true;
-      telescope.enable = true;
-      oil.enable = true;
       treesitter.enable = true;
       luasnip.enable = true;
       zen-mode.enable = true;
@@ -123,6 +130,11 @@
       harpoon.enableTelescope = true;
       harpoon.saveOnChange = true;
       harpoon.saveOnToggle = true;
+      telescope.enable = true;
+      nvim-tree.enable = true;
+      oil.enable = true;
+
+      which-key.enable = true;
 
       # copilot-lua.enable = true;
       # copilot-cmp.enable = true;
@@ -150,6 +162,14 @@
       {
         action = "<cmd>Telescope live_grep<CR>";
         key = "<leader>g";
+      }
+      {
+        action = "<cmd>Oil<CR>";
+        key = "<leader>o";
+      }
+      {
+        action = "<cmd>NvimTreeOpen<CR>";
+        key = "<leader>e";
       }
     ];
   };
