@@ -39,6 +39,7 @@
     # Media
     vlc
     spotify
+    mediathekview
     
     # Games
     steam
@@ -53,6 +54,9 @@
     thefuck
     gh 
     ripgrep
+
+    # Librarys and Programming Languages
+
   ];
 
   # Enable home-manager
