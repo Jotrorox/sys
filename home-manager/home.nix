@@ -40,6 +40,11 @@
     vlc
     spotify
     mediathekview
+
+    # Streaming
+    obs-studio
+    obs-studio-plugins.waveform
+    audacity
     
     # Games
     steam
@@ -57,6 +62,9 @@
 
     # Librarys and Programming Languages
 
+    # Ricing
+    kitty
+    wofi
   ];
 
   # Enable home-manager
@@ -238,6 +246,21 @@
         success_symbol = "[➜](bold green)";
         error_symbol = "[➜](bold red)";
       };
+    };
+  };
+
+  # hyprland
+  wayland.windowManager.hyprland = {
+    enable = true;
+
+    settings = {
+      "$mod" = "SUPER";
+      "monitor" = ",highres,auto,1";
+
+      bindm = [
+	"$mod,RETURN,exec,kitty"
+	"$mod,R,exec,wofi"
+      ];
     };
   };
 

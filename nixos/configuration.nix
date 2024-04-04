@@ -19,6 +19,10 @@
     auto-optimise-store = true;
   };
 
+  environment.variables = {
+    WLR_NO_HARDWARE_CURSORS = "1";
+  };
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -59,7 +63,8 @@
   services.xserver.desktopManager.plasma5.enable = true;
 
   # Enable Window Manager
-  programs.hyprland.enable = true;
+  programs.hyprland.enable = true; 
+  programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland;
 
   # Configure keymap in X11
   services.xserver.xkb = {
