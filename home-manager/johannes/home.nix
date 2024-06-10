@@ -1,38 +1,51 @@
- { config, pkgs, ...}:
+{ config, pkgs, ... }:
 
- {
-    imports = [
-    ];
+{
+  imports = [
+  ];
 
-    home.username = "johannes";
-    home.homeDirectory = "/home/johannes";
+  home.username = "johannes";
+  home.homeDirectory = "/home/johannes";
 
-    home.sessionVariables = {
-        EDITOR = "nvim";
-              SHELL = "zsh";
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    SHELL = "zsh";
+  };
+
+  home.file = { };
+
+  nixpkgs = {
+    overlays = [ ];
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = _: true;
     };
+  };
 
-    home.file = {};
+  home.packages = with pkgs; [
+    kdePackages.kate
+    vesktop
+    spotify
+    ungoogled-chromium
+    steam
+    thefuck
+    gh
+    ripgrep
+    nixpkgs-fmt
+  ];
 
-    nixpkgs = {
-        overlays = [];
-        config = {
-        allowUnfree = true;
-        allowUnfreePredicate = _: true;
-        };
-    };
-
-    home.packages = with pkgs; [
-        kdePackages.kate
-        vesktop
-        vscode-fhs
-        spotify
-        ungoogled-chromium
-        steam
-        thefuck
-        gh
-        ripgrep
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode-fhs;
+    extensions = with pkgs.vscode-extensions; [
+      jnoortheen.nix-ide
+      github.copilot
+      github.copilot-chat
+      github.vscode-github-actions
+      jdinhlife.gruvbox
+      equinusocio.vsc-material-theme-icons
     ];
+  };
 
   # Configure helix
   programs.helix = {
@@ -53,19 +66,19 @@
     };
   };
 
-    programs.git = {
-        enable = true;
-        package = pkgs.gitFull;
-        userName = "Johannes (Jotrorox) Müller";
-        userEmail = "mail@jotrorox.com";
-        aliases = {
-            pu = "push";
-            co = "checkout";
-            cm = "commit";
-        };
+  programs.git = {
+    enable = true;
+    package = pkgs.gitFull;
+    userName = "Johannes (Jotrorox) Müller";
+    userEmail = "mail@jotrorox.com";
+    aliases = {
+      pu = "push";
+      co = "checkout";
+      cm = "commit";
     };
+  };
 
-    # Configure zsh
+  # Configure zsh
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -97,7 +110,7 @@
     };
   };
 
-    home.stateVersion = "24.05";
+  home.stateVersion = "24.05";
 
-    programs.home-manager.enable = true;
- }
+  programs.home-manager.enable = true;
+}
