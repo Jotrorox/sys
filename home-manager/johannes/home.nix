@@ -44,34 +44,15 @@
     nixpkgs-fmt
   ];
 
-  programs.vscode = import ./tools/dev/vscode.nix { inherit pkgs; };
+  programs.vscode = import ./programs/dev/vscode.nix { inherit pkgs; };
 
-  programs.lf = import ./tools/cli/lf.nix { inherit pkgs; };
+  programs.lf = import ./programs/cli/lf.nix { inherit pkgs; };
 
-  programs.helix = import ./tools/dev/helix.nix { inherit pkgs; };
+  programs.helix = import ./programs/dev/helix.nix { inherit pkgs; };
 
-  programs.git = import ./tools/cli/git.nix { inherit pkgs; };
+  programs.git = import ./programs/cli/git.nix { inherit pkgs; };
 
-  # Configuration for the Zsh shell.
-  programs.zsh = {
-    enable = true; # Enable Zsh shell.
-    enableCompletion = true; # Enable command completion.
-    syntaxHighlighting.enable = true; # Enable syntax highlighting.
-
-    shellAliases = {
-      ll = "ls -l"; # Alias for 'ls -l' command.
-      update = "sudo nixos-rebuild switch --flake /home/johannes/sys/"; # Alias for updating the system using NixOS.
-      cat = "${pkgs.bat}/bin/bat --theme=gruvbox"; # Alias for 'bat' command.
-    };
-    history.size = 10000; # Set the maximum size of command history.
-    history.path = "${config.xdg.dataHome}/zsh/history"; # Set the path for storing command history.
-
-    oh-my-zsh = {
-      enable = true; # Enable Oh My Zsh framework.
-      plugins = [ "git" "thefuck" ]; # List of plugins to enable.
-      theme = "robbyrussell"; # Set the theme for the Zsh shell.
-    };
-  };
+  programs.zsh = import ./programs/cli/zsh.nix { inherit pkgs; };
 
   # Configures the Starship program.
   programs.starship = {
