@@ -1,15 +1,10 @@
-{
-  inputs,
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ inputs, config, pkgs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
+      inputs.home-manager.nixosModules.home-manager
     ];
 
   nix.settings = {
@@ -19,20 +14,17 @@
     auto-optimise-store = true;
   };
 
-  environment.variables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-  };
-
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "home";
+  boot.initrd.luks.devices."luks-e7265d3b-64c9-4a80-8a70-05c455f4cd3d".device = "/dev/disk/by-uuid/e7265d3b-64c9-4a80-8a70-05c455f4cd3d";
+  networking.hostName = "home"; # Define your hostname.
 
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Enable Bluetooth
+    # Enable Bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
@@ -56,15 +48,12 @@
   };
 
   # Enable the X11 windowing system.
+  # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
-
-  # Enable Window Manager
-  programs.hyprland.enable = true; 
-  programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -72,7 +61,7 @@
     variant = "";
   };
 
-  # Enable OpenGL
+    # Enable OpenGL
   hardware.opengl = {
     enable = true;
     driSupport = true;
@@ -120,7 +109,6 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -128,38 +116,39 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    jack.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
+  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.johannes = {
     isNormalUser = true;
-    description = "Johannes Müller";
+    description = "Johannes Mueller";
     extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [];
   };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = with pkgs; [
-    wget
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; };
+    users = {
+      johannes = import ./../home-manager/johannes/home.nix;
+    };
+  };
 
-    home-manager
+  # List packages installed in system profile.
+  environment.systemPackages = with pkgs; [];
 
-    # Hardware Info
-    lshw
-  ];
-
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    liberation_ttf
-    victor-mono
-    fira-code-nerdfont
-  ];
-
-  system.stateVersion = "24.05";
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "24.05"; # Did you read the comment?
 
 }
