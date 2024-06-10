@@ -5,7 +5,6 @@
   ];
 
   home.username = "johannes";
-  home.homeDirectory = "/home/johannes";
 
   home.sessionVariables = {
     EDITOR = "nvim";
@@ -14,6 +13,7 @@
 
   home.file = { };
 
+  # Configure nixpkgs to allow unfree software
   nixpkgs = {
     overlays = [ ];
     config = {
@@ -22,35 +22,44 @@
     };
   };
 
+  # Install packages and programs
   home.packages = with pkgs; [
-    kdePackages.kate
-    vesktop
-    spotify
+    # Web
     ungoogled-chromium
+    vesktop
+    
+    # Media
+    spotify
+
+    # Games
     steam
+
+    # CLI tools
     thefuck
     gh
     ripgrep
     nixpkgs-fmt
   ];
 
+  # Configuration for the Visual Studio Code program.
   programs.vscode = {
-    enable = true;
-    package = pkgs.vscode-fhs;
+    enable = true;  # Enable the Visual Studio Code program.
+    package = pkgs.vscode-fhs;  # Use the vscode-fhs package from the Nixpkgs collection.
     extensions = with pkgs.vscode-extensions; [
-      jnoortheen.nix-ide
-      github.copilot
-      github.copilot-chat
-      github.vscode-github-actions
-      jdinhlife.gruvbox
-      equinusocio.vsc-material-theme-icons
+      jnoortheen.nix-ide  # Install the Nix IDE extension.
+      github.copilot  # Install the GitHub Copilot extension.
+      github.copilot-chat  # Install the GitHub Copilot Chat extension.
+      github.vscode-github-actions  # Install the GitHub Actions extension.
+      jdinhlife.gruvbox  # Install the Gruvbox theme extension.
+      equinusocio.vsc-material-theme-icons  # Install the Material Theme Icons extension.
     ];
   };
 
-  # Configure helix
+  # Configuration for the 'helix' program
   programs.helix = {
     enable = true;
     settings = {
+      # The theme for the 'helix' program
       theme = "gruvbox_transparent";
       editor.cursor-shape = {
         normal = "block";
@@ -59,6 +68,7 @@
       };
     };
     themes = {
+      # Configuration for the 'gruvbox_transparent' theme
       gruvbox_transparent = {
         "inherits" = "gruvbox";
         "ui.background" = { };
@@ -66,45 +76,51 @@
     };
   };
 
+  # Configuration for the 'git' program.
   programs.git = {
-    enable = true;
-    package = pkgs.gitFull;
-    userName = "Johannes (Jotrorox) Müller";
-    userEmail = "mail@jotrorox.com";
+    enable = true;  # Enable the 'git' program.
+    package = pkgs.gitFull;  # Use the 'gitFull' package from the Nixpkgs collection.
+    userName = "Johannes (Jotrorox) Müller";  # Set the user name for Git commits.
+    userEmail = "mail@jotrorox.com";  # Set the user email for Git commits.
     aliases = {
-      pu = "push";
-      co = "checkout";
-      cm = "commit";
+      pu = "push";  # Define an alias 'pu' for the 'push' command.
+      co = "checkout";  # Define an alias 'co' for the 'checkout' command.
+      cm = "commit";  # Define an alias 'cm' for the 'commit' command.
     };
   };
 
-  # Configure zsh
+  # FILEPATH: /home/johannes/sys/home-manager/johannes/home.nix
+
+  # Configuration for the Zsh shell.
   programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    syntaxHighlighting.enable = true;
+    enable = true;  # Enable Zsh shell.
+    enableCompletion = true;  # Enable command completion.
+    syntaxHighlighting.enable = true;  # Enable syntax highlighting.
 
     shellAliases = {
-      ll = "ls -l";
-      update = "sudo nixos-rebuild switch --flake /home/johannes/sys/";
+      ll = "ls -l";  # Alias for 'ls -l' command.
+      update = "sudo nixos-rebuild switch --flake /home/johannes/sys/";  # Alias for updating the system using NixOS.
     };
-    history.size = 10000;
-    history.path = "${config.xdg.dataHome}/zsh/history";
+    history.size = 10000;  # Set the maximum size of command history.
+    history.path = "${config.xdg.dataHome}/zsh/history";  # Set the path for storing command history.
 
     oh-my-zsh = {
-      enable = true;
-      plugins = [ "git" "thefuck" ];
-      theme = "robbyrussell";
+      enable = true;  # Enable Oh My Zsh framework.
+      plugins = [ "git" "thefuck" ];  # List of plugins to enable.
+      theme = "robbyrussell";  # Set the theme for the Zsh shell.
     };
   };
 
-  # Configure starship.rs
+  # Configures the Starship program.
   programs.starship = {
     enable = true;
     settings = {
+      # Adds a newline after the prompt.
       add_newline = true;
       character = {
+        # Sets the success symbol to "[➜](bold green)".
         success_symbol = "[➜](bold green)";
+        # Sets the error symbol to "[➜](bold red)".
         error_symbol = "[➜](bold red)";
       };
     };

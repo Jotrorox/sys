@@ -127,6 +127,7 @@
     isNormalUser = true;
     description = "Johannes Mueller";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
     packages = with pkgs; [];
   };
 
@@ -140,8 +141,19 @@
     };
   };
 
+  programs.zsh.enable = true;
+
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [];
+
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    liberation_ttf
+    victor-mono
+    fira-code-nerdfont
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
