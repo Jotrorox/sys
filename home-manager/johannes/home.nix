@@ -23,51 +23,14 @@
     };
   };
 
-  # Install packages and programs
-  home.packages = with pkgs; [
-    # Web
-    ungoogled-chromium
-    vesktop
-
-    # Media
-    spotify
-
-    # Games
-    steam
-    mangohud
-    protonup
-
-    # CLI tools
-    thefuck
-    gh
-    ripgrep
-    nixpkgs-fmt
-  ];
+  home.packages = import ./programs/packages.nix { inherit pkgs; };
 
   programs.vscode = import ./programs/dev/vscode.nix { inherit pkgs; };
-
   programs.lf = import ./programs/cli/lf.nix { inherit pkgs; };
-
   programs.helix = import ./programs/dev/helix.nix { inherit pkgs; };
-
   programs.git = import ./programs/cli/git.nix { inherit pkgs; };
-
   programs.zsh = import ./programs/cli/zsh.nix { inherit pkgs; };
-
-  # Configures the Starship program.
-  programs.starship = {
-    enable = true;
-    settings = {
-      # Adds a newline after the prompt.
-      add_newline = true;
-      character = {
-        # Sets the success symbol to "[➜](bold green)".
-        success_symbol = "[➜](bold green)";
-        # Sets the error symbol to "[➜](bold red)".
-        error_symbol = "[➜](bold red)";
-      };
-    };
-  };
+  programs.starship = import ./programs/cli/starship.nix { inherit pkgs; };
 
   home.stateVersion = "24.05";
 
