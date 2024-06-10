@@ -44,43 +44,13 @@
     nixpkgs-fmt
   ];
 
-  programs.vscode = import ./tools/dev/toolsvscode.nix { inherit pkgs; };
+  programs.vscode = import ./tools/dev/vscode.nix { inherit pkgs; };
 
   programs.lf = import ./tools/cli/lf.nix { inherit pkgs; };
 
-  # Configuration for the 'helix' program
-  programs.helix = {
-    enable = true;
-    settings = {
-      # The theme for the 'helix' program
-      theme = "gruvbox_transparent";
-      editor.cursor-shape = {
-        normal = "block";
-        insert = "bar";
-        select = "underline";
-      };
-    };
-    themes = {
-      # Configuration for the 'gruvbox_transparent' theme
-      gruvbox_transparent = {
-        "inherits" = "gruvbox";
-        "ui.background" = { };
-      };
-    };
-  };
+  programs.helix = import ./tools/dev/helix.nix { inherit pkgs; };
 
-  # Configuration for the 'git' program.
-  programs.git = {
-    enable = true; # Enable the 'git' program.
-    package = pkgs.gitFull; # Use the 'gitFull' package from the Nixpkgs collection.
-    userName = "Johannes (Jotrorox) Müller"; # Set the user name for Git commits.
-    userEmail = "mail@jotrorox.com"; # Set the user email for Git commits.
-    aliases = {
-      pu = "push"; # Define an alias 'pu' for the 'push' command.
-      co = "checkout"; # Define an alias 'co' for the 'checkout' command.
-      cm = "commit"; # Define an alias 'cm' for the 'commit' command.
-    };
-  };
+  programs.git = import ./tools/cli/git.nix { inherit pkgs; };
 
   # Configuration for the Zsh shell.
   programs.zsh = {
