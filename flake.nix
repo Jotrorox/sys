@@ -16,27 +16,27 @@
   };
 
   outputs = { self, nixpkgs, home-manager, nixvim, ... }@inputs:
-  let
-    system = "x86_64-linux";
+    let
+      system = "x86_64-linux";
 
-    pkgs = import nixpkgs {
-      inherit system;
+      pkgs = import nixpkgs {
+        inherit system;
 
-      config = {
-        allowunfree = true;
+        config = {
+          allowunfree = true;
+        };
+      };
+    in
+    {
+
+      nixosConfigurations = {
+        home = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs system; };
+
+          modules = [
+            ./nixos/configuration.nix
+          ];
+        };
       };
     };
-  in
-  {
-
-    nixosConfigurations = {
-      home = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs system; };
-
-        modules = [
-          ./nixos/configuration.nix
-        ];
-      };
-    };
-  };
 }

@@ -24,7 +24,7 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-    # Enable Bluetooth
+  # Enable Bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
@@ -61,7 +61,7 @@
     variant = "";
   };
 
-    # Enable OpenGL
+  # Enable OpenGL
   hardware.opengl = {
     enable = true;
     driSupport = true;
@@ -69,7 +69,7 @@
   };
 
   # Load nvidia driver for Xorg and Wayland
-  services.xserver.videoDrivers = ["nvidia" "intel"];
+  services.xserver.videoDrivers = [ "nvidia" "intel" ];
 
   hardware.nvidia = {
 
@@ -97,10 +97,10 @@
   hardware.nvidia.prime = {
     sync.enable = true;
 
-		# Make sure to use the correct Bus ID values for your system!
-		intelBusId = "PCI:0:2:0";
-		nvidiaBusId = "PCI:1:0:0";
-	};
+    # Make sure to use the correct Bus ID values for your system!
+    intelBusId = "PCI:0:2:0";
+    nvidiaBusId = "PCI:1:0:0";
+  };
 
   # Configure console keymap
   console.keyMap = "de";
@@ -128,7 +128,7 @@
     description = "Johannes Mueller";
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
-    packages = with pkgs; [];
+    packages = with pkgs; [ ];
   };
 
   # Allow unfree packages
@@ -144,7 +144,7 @@
   programs.zsh.enable = true;
 
   # List packages installed in system profile.
-  environment.systemPackages = with pkgs; [];
+  environment.systemPackages = with pkgs; [ ];
 
   fonts.packages = with pkgs; [
     noto-fonts
