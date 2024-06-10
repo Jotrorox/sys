@@ -9,6 +9,7 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     SHELL = "zsh";
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
   };
 
   home.file = { };
@@ -33,6 +34,8 @@
 
     # Games
     steam
+    mangohud
+    protonup
 
     # CLI tools
     thefuck
@@ -53,6 +56,43 @@
       jdinhlife.gruvbox # Install the Gruvbox theme extension.
       equinusocio.vsc-material-theme-icons # Install the Material Theme Icons extension.
     ];
+  };
+
+  programs.lf = {
+    enable = true;
+    commands = {
+      dragon-out = ''%${pkgs.xdragon}/bin/xdragon -a -x "$fx"'';
+      editor-open = ''$$EDITOR $f'';
+      mkdir = ''
+        ''${{
+          printf "Directory Name: "
+          read DIR
+          mkdir $DIR
+        }}
+      '';
+    };
+    settings = {
+      preview = true;
+      hidden = true;
+      drawbox = true;
+      icons = true;
+      ignorecase = true;
+    };
+    keybindings = {
+      "\\\"" = "";
+      o = "";
+      c = "mkdir";
+      "." = "set hidden!";
+      "`" = "mark-load";
+      "\\'" = "mark-load";
+      "<enter>" = "open";
+      do = "dragon-out";
+      "g~" = "cd";
+      gh = "cd";
+      "g/" = "/";
+      ee = "editor-open";
+      V = ''$${pkgs.bat}/bin/bat --paging=always --theme=gruvbox "$f"'';
+    };
   };
 
   # Configuration for the 'helix' program
@@ -98,6 +138,7 @@
     shellAliases = {
       ll = "ls -l"; # Alias for 'ls -l' command.
       update = "sudo nixos-rebuild switch --flake /home/johannes/sys/"; # Alias for updating the system using NixOS.
+      cat = "${pkgs.bat}/bin/bat --theme=gruvbox"; # Alias for 'bat' command.
     };
     history.size = 10000; # Set the maximum size of command history.
     history.path = "${config.xdg.dataHome}/zsh/history"; # Set the path for storing command history.
