@@ -44,56 +44,9 @@
     nixpkgs-fmt
   ];
 
-  # Configuration for the Visual Studio Code program.
-  programs.vscode = {
-    enable = true; # Enable the Visual Studio Code program.
-    package = pkgs.vscode-fhs; # Use the vscode-fhs package from the Nixpkgs collection.
-    extensions = with pkgs.vscode-extensions; [
-      jnoortheen.nix-ide # Install the Nix IDE extension.
-      github.copilot # Install the GitHub Copilot extension.
-      github.copilot-chat # Install the GitHub Copilot Chat extension.
-      github.vscode-github-actions # Install the GitHub Actions extension.
-      jdinhlife.gruvbox # Install the Gruvbox theme extension.
-      equinusocio.vsc-material-theme-icons # Install the Material Theme Icons extension.
-    ];
-  };
+  programs.vscode = import ./tools/dev/toolsvscode.nix { inherit pkgs; };
 
-  programs.lf = {
-    enable = true;
-    commands = {
-      dragon-out = ''%${pkgs.xdragon}/bin/xdragon -a -x "$fx"'';
-      editor-open = ''$$EDITOR $f'';
-      mkdir = ''
-        ''${{
-          printf "Directory Name: "
-          read DIR
-          mkdir $DIR
-        }}
-      '';
-    };
-    settings = {
-      preview = true;
-      hidden = true;
-      drawbox = true;
-      icons = true;
-      ignorecase = true;
-    };
-    keybindings = {
-      "\\\"" = "";
-      o = "";
-      c = "mkdir";
-      "." = "set hidden!";
-      "`" = "mark-load";
-      "\\'" = "mark-load";
-      "<enter>" = "open";
-      do = "dragon-out";
-      "g~" = "cd";
-      gh = "cd";
-      "g/" = "/";
-      ee = "editor-open";
-      V = ''$${pkgs.bat}/bin/bat --paging=always --theme=gruvbox "$f"'';
-    };
-  };
+  programs.lf = import ./tools/cli/lf.nix { inherit pkgs; };
 
   # Configuration for the 'helix' program
   programs.helix = {
