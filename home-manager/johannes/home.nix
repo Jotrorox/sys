@@ -29,7 +29,7 @@
   programs.lf = import ./programs/cli/lf.nix { inherit pkgs; };
   programs.helix = import ./programs/dev/helix.nix { inherit pkgs; };
   programs.git = import ./programs/cli/git.nix { inherit pkgs; };
-  programs.zsh = import ./programs/cli/zsh.nix { inherit pkgs; };
+  programs.zsh = import ./programs/cli/zsh.nix { inherit pkgs config; };
   programs.starship = import ./programs/cli/starship.nix { inherit pkgs; };
 
   home.stateVersion = "24.05";

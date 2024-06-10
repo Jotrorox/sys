@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, config }:
 
 {
   enable = true; # Enable Zsh shell.
