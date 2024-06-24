@@ -1,42 +1,12 @@
 {
-  description = "NixOS Config";
+  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
+  inputs.home-manager.url = github:nix-community/home-manager;
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
+  outputs = { self, nixpkgs, ... }@attrs: {
+    nixosConfigurations.home = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = attrs;
+      modules = [ ./os/configuration.nix ];
     };
   };
-
-  outputs = { self, nixpkgs, home-manager, nixvim, ... }@inputs:
-    let
-      system = "x86_64-linux";
-
-      pkgs = import nixpkgs {
-        inherit system;
-
-        config = {
-          allowunfree = true;
-        };
-      };
-    in
-    {
-
-      nixosConfigurations = {
-        home = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs system; };
-
-          modules = [
-            ./nixos/configuration.nix
-          ];
-        };
-      };
-    };
 }

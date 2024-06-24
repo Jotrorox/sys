@@ -1,10 +1,9 @@
-{ inputs, config, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports =
     [
       ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.home-manager
     ];
 
   nix.settings = {
@@ -14,12 +13,13 @@
     auto-optimise-store = true;
   };
 
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.luks.devices."luks-e7265d3b-64c9-4a80-8a70-05c455f4cd3d".device = "/dev/disk/by-uuid/e7265d3b-64c9-4a80-8a70-05c455f4cd3d";
-  networking.hostName = "home"; # Define your hostname.
+  boot.initrd.luks.devices."luks-dc322ed6-0777-4da0-8b71-7afbe8d73ced".device = "/dev/disk/by-uuid/dc322ed6-0777-4da0-8b71-7afbe8d73ced";
+  networking.hostName = "home";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -28,6 +28,7 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
+
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -56,12 +57,34 @@
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
-  services.xserver.xkb = {
+  services.xserver = {
     layout = "de";
-    variant = "";
+    xkbVariant = "";
   };
 
-  # Enable OpenGL
+  # Configure console keymap
+  console.keyMap = "de";
+
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
+  # Enable sound with pipewire.
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
+
+# Enable OpenGL
   hardware.opengl = {
     enable = true;
     driSupport = true;
@@ -102,49 +125,38 @@
     nvidiaBusId = "PCI:1:0:0";
   };
 
-  # Configure console keymap
-  console.keyMap = "de";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-
   # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.johannes = {
     isNormalUser = true;
     description = "Johannes Mueller";
     extraGroups = [ "networkmanager" "wheel" ];
-    shell = pkgs.zsh;
-    packages = with pkgs; [ ];
+    packages = with pkgs; [
+      kdePackages.kate
+      brave
+      vesktop
+      spotify
+      mullvad-vpn
+    ];
   };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    users = {
-      johannes = import ./../home-manager/johannes/home.nix;
-    };
-  };
-
-  programs.zsh.enable = true;
-
   # List packages installed in system profile.
-  environment.systemPackages = with pkgs; [ ];
+  environment.systemPackages = with pkgs; [
+    tuxedo-rs
+    mullvad-vpn
+  ];
+
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };
 
   fonts.packages = with pkgs; [
     noto-fonts
